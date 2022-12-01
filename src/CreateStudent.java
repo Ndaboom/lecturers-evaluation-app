@@ -88,7 +88,7 @@ public class CreateStudent extends JFrame{
 			     
 			     if(textField.getText().trim().length()>0 && textField_1.getText().toUpperCase().trim().length()>0 && textField_2.getText().toUpperCase().trim().length()>0) {
 			    	 try{
-				            String requete="INSERT INTO students_tb(roll_number, student_class, student_names)value ('"+rn_recup+"','"+name_recup+"','"+student_class+"')";
+				            String requete="INSERT INTO students_tb(roll_number, student_class, student_names)value ('"+rn_recup+"','"+student_class+"','"+name_recup+"')";
 				            stmt=maConnexion.ObtenirConnexion().createStatement();
 				            stmt.executeUpdate(requete);
 				            JOptionPane.showMessageDialog(null,"Student registered successfully!");

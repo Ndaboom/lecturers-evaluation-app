@@ -33,7 +33,6 @@ import javax.swing.JComboBox;
 public class MainView {
 
 	private JFrame frame;
-	private JTextField textField;
 	private JTextField textField_1;
 	private com.toedter.calendar.JDateChooser product_expiry_date;
 	private JLabel lblNewLabel_3;
@@ -115,9 +114,11 @@ public class MainView {
 	Statement stmt;
     Connexion maConnexion= new Connexion();
     private JTable table;
+    public JComboBox<String> comboBox;
+    private JComboBox comboBox_1;
+    private JMenuItem mntmNewMenuItem_2;
     
     public void getData(){
-    	System.out.println("Fetching data...");
         try{
 
             java.sql.Statement stmt1= maConnexion.ObtenirConnexion().createStatement();
@@ -156,11 +157,6 @@ public class MainView {
 		JLabel lblNewLabel_2 = new JLabel("Course name");
 		lblNewLabel_2.setBounds(10, 120, 81, 14);
 		panel.add(lblNewLabel_2);
-		
-		textField = new JTextField();
-		textField.setBounds(139, 70, 213, 29);
-		panel.add(textField);
-		textField.setColumns(10);
 		
 		textField_1 = new JTextField();
 		textField_1.setBounds(139, 113, 212, 29);
@@ -211,13 +207,13 @@ public class MainView {
 				 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
 			        String evaluation_date_recup = sdf.format(product_expiry_date.getDate());
-			        String lecturer_name_recup = textField.getText().toUpperCase().trim();
+			        String lecturer_name_recup = comboBox_1.getSelectedItem().toString().trim();
 			        String course_name_recup = textField_1.getText().trim();
 			        String knowledge_points_recup = textField_2.getText().trim();
 			        String teaching_skills_recup = textField_3.getText().trim();
 			        String ethical_values_recup = textField_4.getText().trim();
 			        
-			        if(textField_1.getText().trim().length()>0 && textField.getText().toUpperCase().trim().length()>0 && textField_2.getText().toUpperCase().trim().length()>0
+			        if(textField_1.getText().trim().length()>0 && textField_2.getText().toUpperCase().trim().length()>0
 			        		&& textField_3.getText().trim().length()>0 && textField_4.getText().trim().length()>0){
 			            
 			            try{
@@ -226,7 +222,6 @@ public class MainView {
 			            stmt.executeUpdate(requete);
 			            getData();
 			            JOptionPane.showMessageDialog(null,"Record saved successfully!");
-			            textField.setText("");
 			            textField_1.setText("");
 			            textField_2.setText("");
 			            textField_3.setText("");
@@ -295,6 +290,16 @@ public class MainView {
 		});
 		mnNewMenu.add(mntmNewMenuItem_1);
 		
+		mntmNewMenuItem_2 = new JMenuItem("Refresh data");
+		mntmNewMenuItem_2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) { 
+            	fecthStudents();
+        		fecthLecturers();
+        		getData();
+            }
+		});
+		mnNewMenu.add(mntmNewMenuItem_2);
+		
 		JSeparator separator = new JSeparator();
 		separator.setBounds(10, 210, 394, 2);
 		panel.add(separator);
@@ -303,11 +308,45 @@ public class MainView {
 		lblNewLabel_7.setBounds(10, 233, 81, 14);
 		panel.add(lblNewLabel_7);
 		
-		JComboBox comboBox = new JComboBox();
-		comboBox.setBounds(215, 223, 137, 22);
+		comboBox = new JComboBox<String>();
+		comboBox.setBounds(215, 223, 137, 29);
 		panel.add(comboBox);
 		
+		comboBox_1 = new JComboBox();
+		comboBox_1.setBounds(139, 66, 212, 29);
+		panel.add(comboBox_1);
+		fecthStudents();
+		fecthLecturers();
 		
+	}
 	
+	public void fecthStudents() {
+		 try{
+
+	         java.sql.Statement stmt1= maConnexion.ObtenirConnexion().createStatement();
+	         java.sql.ResultSet resultat= stmt1.executeQuery("SELECT * FROM students_tb");
+	         while(resultat.next()){                     
+	        	 comboBox.addItem(resultat.getString("student_names")+"/"+resultat.getString("roll_number")); 
+	         }
+		
+	       }catch(Exception e){
+		
+		
+	       }
+	}
+	
+	public void fecthLecturers() {
+		 try{
+
+	         java.sql.Statement stmt1= maConnexion.ObtenirConnexion().createStatement();
+	         java.sql.ResultSet resultat= stmt1.executeQuery("SELECT * FROM lecturers_tb");
+	         while(resultat.next()){                     
+	        	 comboBox_1.addItem(resultat.getString("lecturer_name")); 
+	         }
+		
+	       }catch(Exception e){
+		
+		
+	       }
 	}
 }
