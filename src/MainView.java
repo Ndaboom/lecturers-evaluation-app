@@ -27,6 +27,8 @@ import javax.swing.JTable;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JSeparator;
+import javax.swing.JComboBox;
 
 public class MainView {
 
@@ -176,20 +178,20 @@ public class MainView {
 		panel.add(lblNewLabel_3);
 		
 		lblNewLabel_4 = new JLabel("Knowledge and Competence :");
-		lblNewLabel_4.setBounds(10, 253, 183, 14);
+		lblNewLabel_4.setBounds(10, 277, 183, 14);
 		panel.add(lblNewLabel_4);
 		
 		textField_2 = new JTextField();
-		textField_2.setBounds(215, 239, 137, 42);
+		textField_2.setBounds(215, 273, 137, 29);
 		panel.add(textField_2);
 		textField_2.setColumns(10);
 		
 		lblNewLabel_5 = new JLabel("Teaching skills/ Methodology :");
-		lblNewLabel_5.setBounds(10, 315, 173, 14);
+		lblNewLabel_5.setBounds(10, 332, 173, 14);
 		panel.add(lblNewLabel_5);
 		
 		textField_3 = new JTextField();
-		textField_3.setBounds(215, 302, 137, 40);
+		textField_3.setBounds(215, 325, 137, 29);
 		panel.add(textField_3);
 		textField_3.setColumns(10);
 		
@@ -198,7 +200,7 @@ public class MainView {
 		panel.add(lblNewLabel_6);
 		
 		textField_4 = new JTextField();
-		textField_4.setBounds(215, 365, 137, 40);
+		textField_4.setBounds(215, 376, 137, 29);
 		panel.add(textField_4);
 		textField_4.setColumns(10);
 		
@@ -292,6 +294,18 @@ public class MainView {
             }
 		});
 		mnNewMenu.add(mntmNewMenuItem_1);
+		
+		JSeparator separator = new JSeparator();
+		separator.setBounds(10, 210, 394, 2);
+		panel.add(separator);
+		
+		JLabel lblNewLabel_7 = new JLabel("Student :");
+		lblNewLabel_7.setBounds(10, 233, 81, 14);
+		panel.add(lblNewLabel_7);
+		
+		JComboBox comboBox = new JComboBox();
+		comboBox.setBounds(215, 223, 137, 22);
+		panel.add(comboBox);
 		
 		
 	

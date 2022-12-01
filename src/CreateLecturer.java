@@ -57,7 +57,7 @@ public class CreateLecturer extends JFrame{
 		textField.setColumns(10);
 		
 		JLabel lblNewLabel_1 = new JLabel("Lecturer's name");
-		lblNewLabel_1.setBounds(84, 61, 84, 14);
+		lblNewLabel_1.setBounds(84, 61, 166, 14);
 		panel.add(lblNewLabel_1);
 		
 		JLabel lblNewLabel_2 = new JLabel("Course");
