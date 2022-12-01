@@ -19,6 +19,8 @@ import net.proteanit.sql.DbUtils;
 
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
@@ -29,6 +31,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
 import javax.swing.JComboBox;
+import javax.swing.JCheckBox;
 
 public class MainView {
 
@@ -44,28 +47,7 @@ public class MainView {
 	private JTextField textField_4;
 	private javax.swing.JScrollPane jScrollPane1;
 	
-	 private javax.swing.JMenu jMenu1;
-	    private javax.swing.JMenu jMenu2;
-	    private javax.swing.JMenu jMenu3;
-	    private javax.swing.JMenu jMenu4;
-	    private javax.swing.JMenu jMenu5;
-	    private javax.swing.JMenu jMenu6;
-	    private javax.swing.JMenuBar jMenuBar1;
-	    private javax.swing.JMenuItem jMenuItem1;
-	    private javax.swing.JMenuItem jMenuItem2;
-	    private javax.swing.JMenuItem jMenuItem3;
-	    private javax.swing.JMenuItem jMenuItem4;
-	    private javax.swing.JMenuItem jMenuItem5;
-	    private javax.swing.JMenuItem jMenuItem6;
-	    private javax.swing.JMenuItem jMenuItem7;
-	    private javax.swing.JMenuItem jMenuItem8;
-	    private javax.swing.JPanel jPAppli;
-	    private javax.swing.JPopupMenu.Separator jSeparator1;
-	    private javax.swing.JPopupMenu.Separator jSeparator2;
-	    private javax.swing.JPopupMenu.Separator jSeparator3;
-	    private javax.swing.JPopupMenu.Separator jSeparator4;
-
-	/**
+	 /**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
@@ -115,7 +97,7 @@ public class MainView {
     Connexion maConnexion= new Connexion();
     private JTable table;
     public JComboBox<String> comboBox;
-    private JComboBox comboBox_1;
+    private JComboBox<String> comboBox_1;
     private JMenuItem mntmNewMenuItem_2;
     
     public void getData(){
@@ -174,29 +156,29 @@ public class MainView {
 		panel.add(lblNewLabel_3);
 		
 		lblNewLabel_4 = new JLabel("Knowledge and Competence :");
-		lblNewLabel_4.setBounds(10, 277, 183, 14);
+		lblNewLabel_4.setBounds(10, 329, 183, 14);
 		panel.add(lblNewLabel_4);
 		
 		textField_2 = new JTextField();
-		textField_2.setBounds(215, 273, 137, 29);
+		textField_2.setBounds(214, 322, 137, 29);
 		panel.add(textField_2);
 		textField_2.setColumns(10);
 		
 		lblNewLabel_5 = new JLabel("Teaching skills/ Methodology :");
-		lblNewLabel_5.setBounds(10, 332, 173, 14);
+		lblNewLabel_5.setBounds(10, 370, 173, 14);
 		panel.add(lblNewLabel_5);
 		
 		textField_3 = new JTextField();
-		textField_3.setBounds(215, 325, 137, 29);
+		textField_3.setBounds(214, 363, 137, 29);
 		panel.add(textField_3);
 		textField_3.setColumns(10);
 		
 		lblNewLabel_6 = new JLabel("Ethical Values :");
-		lblNewLabel_6.setBounds(10, 378, 146, 14);
+		lblNewLabel_6.setBounds(10, 410, 146, 14);
 		panel.add(lblNewLabel_6);
 		
 		textField_4 = new JTextField();
-		textField_4.setBounds(215, 376, 137, 29);
+		textField_4.setBounds(214, 403, 137, 29);
 		panel.add(textField_4);
 		textField_4.setColumns(10);
 		
@@ -237,7 +219,7 @@ public class MainView {
 				//Query
 			}
 		});
-		btnNewButton.setBounds(105, 429, 152, 40);
+		btnNewButton.setBounds(104, 454, 152, 40);
 		panel.add(btnNewButton);
 		
 		jScrollPane1 = new javax.swing.JScrollPane();
@@ -312,9 +294,43 @@ public class MainView {
 		comboBox.setBounds(215, 223, 137, 29);
 		panel.add(comboBox);
 		
-		comboBox_1 = new JComboBox();
+		comboBox_1 = new JComboBox<String>();
 		comboBox_1.setBounds(139, 66, 212, 29);
 		panel.add(comboBox_1);
+		
+		JCheckBox chckbxNewCheckBox = new JCheckBox("If HOD");
+		chckbxNewCheckBox.setBackground(Color.WHITE);
+		chckbxNewCheckBox.setBounds(96, 275, 97, 23);
+		panel.add(chckbxNewCheckBox);
+		
+		JCheckBox chckbxNewCheckBox_1 = new JCheckBox("If CP");
+		chckbxNewCheckBox_1.setBackground(Color.WHITE);
+		chckbxNewCheckBox_1.setBounds(198, 275, 97, 23);
+		panel.add(chckbxNewCheckBox_1);
+		
+		chckbxNewCheckBox.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				// TODO Auto-generated method stub
+				if(e.getStateChange() == ItemEvent.SELECTED) {//checkbox has been selected
+					comboBox.setEnabled(false);
+		        } else {//checkbox has been deselected
+		        	comboBox.setEnabled(true);
+		        };
+			}
+		});
+		
+		chckbxNewCheckBox_1.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				// TODO Auto-generated method stub
+				if(e.getStateChange() == ItemEvent.SELECTED) {//checkbox has been selected
+					comboBox.setEnabled(false);
+		        } else {//checkbox has been deselected
+		        	comboBox.setEnabled(true);
+		        };
+			}
+		});
 		fecthStudents();
 		fecthLecturers();
 		
