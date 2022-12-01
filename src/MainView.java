@@ -132,73 +132,73 @@ public class MainView {
 		
 		
 		frame = new JFrame();
-		frame.setBounds(100, 100, 1000, 452);
+		frame.setBounds(100, 100, 1003, 555);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
 		JPanel panel = new JPanel();
-		panel.setBounds(0, 0, 984, 413);
+		panel.setBounds(0, 0, 984, 516);
 		panel.setBackground(Color.WHITE);
 		frame.getContentPane().add(panel);
 		panel.setLayout(null);
 		
 		JLabel lblNewLabel = new JLabel("Lecturer's Evaluation");
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblNewLabel.setBounds(265, 0, 191, 29);
+		lblNewLabel.setBounds(382, 11, 191, 29);
 		panel.add(lblNewLabel);
 		
 		JLabel lblNewLabel_1 = new JLabel("Lecturer's name");
-		lblNewLabel_1.setBounds(10, 47, 91, 14);
+		lblNewLabel_1.setBounds(10, 77, 91, 14);
 		panel.add(lblNewLabel_1);
 		
 		JLabel lblNewLabel_2 = new JLabel("Course name");
-		lblNewLabel_2.setBounds(10, 81, 81, 14);
+		lblNewLabel_2.setBounds(10, 120, 81, 14);
 		panel.add(lblNewLabel_2);
 		
 		textField = new JTextField();
-		textField.setBounds(139, 40, 213, 29);
+		textField.setBounds(139, 70, 213, 29);
 		panel.add(textField);
 		textField.setColumns(10);
 		
 		textField_1 = new JTextField();
-		textField_1.setBounds(139, 74, 212, 29);
+		textField_1.setBounds(139, 113, 212, 29);
 		panel.add(textField_1);
 		textField_1.setColumns(10);
 		
 		product_expiry_date = new JDateChooser();
 		product_expiry_date.setDate(new Date());
 		product_expiry_date.setDateFormatString("yyyy-MM-dd");
-		product_expiry_date.setBounds(139, 114, 213, 29);
+		product_expiry_date.setBounds(139, 153, 213, 29);
 		panel.add(product_expiry_date);
 		
 		lblNewLabel_3 = new JLabel("Date");
-		lblNewLabel_3.setBounds(10, 129, 46, 14);
+		lblNewLabel_3.setBounds(10, 163, 46, 14);
 		panel.add(lblNewLabel_3);
 		
 		lblNewLabel_4 = new JLabel("Knowledge and Competence :");
-		lblNewLabel_4.setBounds(22, 168, 183, 14);
+		lblNewLabel_4.setBounds(10, 253, 183, 14);
 		panel.add(lblNewLabel_4);
 		
 		textField_2 = new JTextField();
-		textField_2.setBounds(215, 154, 137, 42);
+		textField_2.setBounds(215, 239, 137, 42);
 		panel.add(textField_2);
 		textField_2.setColumns(10);
 		
 		lblNewLabel_5 = new JLabel("Teaching skills/ Methodology :");
-		lblNewLabel_5.setBounds(22, 220, 173, 14);
+		lblNewLabel_5.setBounds(10, 315, 173, 14);
 		panel.add(lblNewLabel_5);
 		
 		textField_3 = new JTextField();
-		textField_3.setBounds(215, 207, 137, 40);
+		textField_3.setBounds(215, 302, 137, 40);
 		panel.add(textField_3);
 		textField_3.setColumns(10);
 		
 		lblNewLabel_6 = new JLabel("Ethical Values :");
-		lblNewLabel_6.setBounds(22, 283, 146, 14);
+		lblNewLabel_6.setBounds(10, 378, 146, 14);
 		panel.add(lblNewLabel_6);
 		
 		textField_4 = new JTextField();
-		textField_4.setBounds(215, 270, 137, 40);
+		textField_4.setBounds(215, 365, 137, 40);
 		panel.add(textField_4);
 		textField_4.setColumns(10);
 		
@@ -240,11 +240,11 @@ public class MainView {
 				//Query
 			}
 		});
-		btnNewButton.setBounds(118, 347, 152, 40);
+		btnNewButton.setBounds(105, 429, 152, 40);
 		panel.add(btnNewButton);
 		
 		jScrollPane1 = new javax.swing.JScrollPane();
-		jScrollPane1.setSize(549, 347);
+		jScrollPane1.setSize(549, 365);
 		jScrollPane1.setLocation(414, 40);
 		
 		table = new JTable();
@@ -278,7 +278,6 @@ public class MainView {
 		JMenuItem mntmNewMenuItem = new JMenuItem("Add Student");
 		mntmNewMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) { 
-            System.out.println("Clicked on");
             CreateStudent ct = new CreateStudent();
             ct.setVisible(true);
             }
@@ -286,6 +285,12 @@ public class MainView {
 		mnNewMenu.add(mntmNewMenuItem);
 		
 		JMenuItem mntmNewMenuItem_1 = new JMenuItem("Add Lecturer");
+		mntmNewMenuItem_1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) { 
+            CreateLecturer cl = new CreateLecturer();
+            cl.setVisible(true);
+            }
+		});
 		mnNewMenu.add(mntmNewMenuItem_1);
 		
 		
