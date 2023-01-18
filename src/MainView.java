@@ -17,6 +17,7 @@ import com.toedter.calendar.JDateChooser;
 
 import net.proteanit.sql.DbUtils;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -33,7 +34,7 @@ import javax.swing.JSeparator;
 import javax.swing.JComboBox;
 import javax.swing.JCheckBox;
 
-public class MainView {
+public class MainView extends JFrame {
 
 	private JFrame frame;
 	private JTextField textField_1;
@@ -46,41 +47,12 @@ public class MainView {
 	private JLabel lblNewLabel_6;
 	private JTextField textField_4;
 	private javax.swing.JScrollPane jScrollPane1;
+	public String evaluator;
+	JLabel lblNewLabel_9;
 	
 	 /**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		// Look and feel 
-				try {
-		            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-		                if ("Nimbus".equals(info.getName())) {
-		                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-		                    break;
-		                }
-		            }
-		        } catch (ClassNotFoundException ex) {
-		            java.util.logging.Logger.getLogger(MainView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-		        } catch (InstantiationException ex) {
-		            java.util.logging.Logger.getLogger(MainView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-		        } catch (IllegalAccessException ex) {
-		            java.util.logging.Logger.getLogger(MainView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-		        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-		            java.util.logging.Logger.getLogger(MainView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-		        }
-				// Look and feel
-				
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					MainView window = new MainView();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Create the application.
@@ -91,7 +63,7 @@ public class MainView {
 	}
 
 	/**
-	 * Initialize the contents of the frame.
+	 * Initialize the contents of the this.
 	 */
 	Statement stmt;
     Connexion maConnexion= new Connexion();
@@ -99,6 +71,7 @@ public class MainView {
     public JComboBox<String> comboBox;
     private JComboBox<String> comboBox_1;
     private JMenuItem mntmNewMenuItem_2;
+    public float total_max = 0;
     
     public void getData(){
         try{
@@ -115,16 +88,15 @@ public class MainView {
     }
 	private void initialize() {
 		
-		
-		frame = new JFrame();
-		frame.setBounds(100, 100, 1003, 555);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(null);
+		this.setBounds(100, 100, 1003, 555);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setIconImage(new ImageIcon(getClass().getResource("logo.png")).getImage());
+		this.getContentPane().setLayout(null);
 		
 		JPanel panel = new JPanel();
 		panel.setBounds(0, 0, 984, 516);
 		panel.setBackground(Color.WHITE);
-		frame.getContentPane().add(panel);
+		this.getContentPane().add(panel);
 		panel.setLayout(null);
 		
 		JLabel lblNewLabel = new JLabel("Lecturer's Evaluation");
@@ -155,7 +127,7 @@ public class MainView {
 		lblNewLabel_3.setBounds(10, 163, 46, 14);
 		panel.add(lblNewLabel_3);
 		
-		lblNewLabel_4 = new JLabel("Knowledge and Competence :");
+		lblNewLabel_4 = new JLabel("Knowledge and Competence (/40):");
 		lblNewLabel_4.setBounds(10, 329, 183, 14);
 		panel.add(lblNewLabel_4);
 		
@@ -164,7 +136,7 @@ public class MainView {
 		panel.add(textField_2);
 		textField_2.setColumns(10);
 		
-		lblNewLabel_5 = new JLabel("Teaching skills/ Methodology :");
+		lblNewLabel_5 = new JLabel("Teaching skills/ Methodology (/40):");
 		lblNewLabel_5.setBounds(10, 370, 173, 14);
 		panel.add(lblNewLabel_5);
 		
@@ -173,7 +145,7 @@ public class MainView {
 		panel.add(textField_3);
 		textField_3.setColumns(10);
 		
-		lblNewLabel_6 = new JLabel("Ethical Values :");
+		lblNewLabel_6 = new JLabel("Ethical Values (/20):");
 		lblNewLabel_6.setBounds(10, 410, 146, 14);
 		panel.add(lblNewLabel_6);
 		
@@ -199,7 +171,7 @@ public class MainView {
 			        		&& textField_3.getText().trim().length()>0 && textField_4.getText().trim().length()>0){
 			            
 			            try{
-			            String requete="INSERT INTO evaluations_record(lecturer_name, course_name, evaluation_date, knowledge_points, teaching_points, ethical_points)value ('"+lecturer_name_recup+"','"+course_name_recup+"','"+evaluation_date_recup+"','"+knowledge_points_recup+"','"+teaching_skills_recup+"','"+ethical_values_recup+"')";
+			            String requete="INSERT INTO evaluations_record(lecturer_name, course_name, evaluation_date, knowledge_points, teaching_points, ethical_points, evaluator)value ('"+lecturer_name_recup+"','"+course_name_recup+"','"+evaluation_date_recup+"','"+knowledge_points_recup+"','"+teaching_skills_recup+"','"+ethical_values_recup+"','"+evaluator+"')";
 			            stmt=maConnexion.ObtenirConnexion().createStatement();
 			            stmt.executeUpdate(requete);
 			            getData();
@@ -208,7 +180,7 @@ public class MainView {
 			            textField_2.setText("");
 			            textField_3.setText("");
 			            textField_4.setText("");
-			        product_expiry_date.setDate(new Date());
+			            product_expiry_date.setDate(new Date());
 			            }catch(SQLException | HeadlessException e1) {
 			            	JOptionPane.showMessageDialog(null, "Something went wrong");
 			            	System.out.println(e1);
@@ -278,6 +250,7 @@ public class MainView {
             	fecthStudents();
         		fecthLecturers();
         		getData();
+        		getMarks();
             }
 		});
 		mnNewMenu.add(mntmNewMenuItem_2);
@@ -308,14 +281,40 @@ public class MainView {
 		chckbxNewCheckBox_1.setBounds(198, 275, 97, 23);
 		panel.add(chckbxNewCheckBox_1);
 		
+		JLabel lblNewLabel_8 = new JLabel("Total Marks :");
+		lblNewLabel_8.setBounds(414, 418, 130, 14);
+		panel.add(lblNewLabel_8);
+		
+		lblNewLabel_9 = new JLabel("0");
+		lblNewLabel_9.setBounds(554, 418, 46, 14);
+		panel.add(lblNewLabel_9);
+		
+		JLabel lblNewLabel_10 = new JLabel("Total marks of HOD :");
+		lblNewLabel_10.setBounds(414, 442, 130, 14);
+		panel.add(lblNewLabel_10);
+		
+		JLabel lblNewLabel_11 = new JLabel("0");
+		lblNewLabel_11.setBounds(554, 443, 46, 14);
+		panel.add(lblNewLabel_11);
+		
+		JLabel lblNewLabel_12 = new JLabel("Total marks of Students :");
+		lblNewLabel_12.setBounds(414, 467, 130, 14);
+		panel.add(lblNewLabel_12);
+		
+		JLabel lblNewLabel_13 = new JLabel("0");
+		lblNewLabel_13.setBounds(554, 467, 46, 14);
+		panel.add(lblNewLabel_13);
+		
 		chckbxNewCheckBox.addItemListener(new ItemListener() {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 				// TODO Auto-generated method stub
 				if(e.getStateChange() == ItemEvent.SELECTED) {//checkbox has been selected
 					comboBox.setEnabled(false);
+					evaluator = "HOD";
 		        } else {//checkbox has been deselected
 		        	comboBox.setEnabled(true);
+		        	evaluator = comboBox.getSelectedItem().toString().trim();
 		        };
 			}
 		});
@@ -326,19 +325,21 @@ public class MainView {
 				// TODO Auto-generated method stub
 				if(e.getStateChange() == ItemEvent.SELECTED) {//checkbox has been selected
 					comboBox.setEnabled(false);
+					evaluator = "CP";
 		        } else {//checkbox has been deselected
 		        	comboBox.setEnabled(true);
+		        	evaluator = comboBox.getSelectedItem().toString().trim();
 		        };
 			}
 		});
 		fecthStudents();
 		fecthLecturers();
-		
+		getMarks();
 	}
 	
 	public void fecthStudents() {
 		 try{
-
+			 comboBox.removeAllItems();
 	         java.sql.Statement stmt1= maConnexion.ObtenirConnexion().createStatement();
 	         java.sql.ResultSet resultat= stmt1.executeQuery("SELECT * FROM students_tb");
 	         while(resultat.next()){                     
@@ -353,7 +354,7 @@ public class MainView {
 	
 	public void fecthLecturers() {
 		 try{
-
+			 comboBox_1.removeAllItems();
 	         java.sql.Statement stmt1= maConnexion.ObtenirConnexion().createStatement();
 	         java.sql.ResultSet resultat= stmt1.executeQuery("SELECT * FROM lecturers_tb");
 	         while(resultat.next()){                     
@@ -364,5 +365,23 @@ public class MainView {
 		
 		
 	       }
+	}
+	
+	public void getMarks() {
+		System.out.println("Get marks function called");
+		try {
+		 System.out.println("Trying the query...");
+         java.sql.Statement stmt1= maConnexion.ObtenirConnexion().createStatement();
+         java.sql.ResultSet resultat= stmt1.executeQuery("SELECT * FROM evaluations_record");
+         while(resultat.next()){      
+        	 System.out.println("Record "+resultat.getFloat(4));
+        	 total_max = resultat.getFloat(4)+resultat.getFloat(5)+resultat.getFloat(6);
+         }
+	
+       }catch(Exception e){
+	 
+	
+       }
+	   lblNewLabel_9.setText(total_max+"");	
 	}
 }
