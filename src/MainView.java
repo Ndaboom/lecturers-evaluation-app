@@ -45,10 +45,17 @@ public class MainView extends JFrame {
 	private JLabel lblNewLabel_5;
 	private JTextField textField_3;
 	private JLabel lblNewLabel_6;
+	private JLabel lblNewLabel_9_1;
+	JLabel lblNewLabel_13;
 	private JTextField textField_4;
 	private javax.swing.JScrollPane jScrollPane1;
 	public String evaluator;
 	JLabel lblNewLabel_9;
+	JLabel lblNewLabel_10;
+	JLabel lblNewLabel_11;
+	float marksSum = 0;
+	String HOD = "HOD";
+	JComboBox<String> comboBox_1_1;
 	
 	 /**
 	 * Launch the application.
@@ -171,6 +178,9 @@ public class MainView extends JFrame {
 			        		&& textField_3.getText().trim().length()>0 && textField_4.getText().trim().length()>0){
 			            
 			            try{
+			            if(evaluator == null) {
+			            	evaluator = comboBox.getSelectedItem().toString().trim();
+			            }
 			            String requete="INSERT INTO evaluations_record(lecturer_name, course_name, evaluation_date, knowledge_points, teaching_points, ethical_points, evaluator)value ('"+lecturer_name_recup+"','"+course_name_recup+"','"+evaluation_date_recup+"','"+knowledge_points_recup+"','"+teaching_skills_recup+"','"+ethical_values_recup+"','"+evaluator+"')";
 			            stmt=maConnexion.ObtenirConnexion().createStatement();
 			            stmt.executeUpdate(requete);
@@ -181,11 +191,15 @@ public class MainView extends JFrame {
 			            textField_3.setText("");
 			            textField_4.setText("");
 			            product_expiry_date.setDate(new Date());
+			            evaluator = null;
+			            
 			            }catch(SQLException | HeadlessException e1) {
 			            	JOptionPane.showMessageDialog(null, "Something went wrong");
 			            	System.out.println(e1);
 			            }
-			        }else {
+			        } else if(textField_1.getText().trim().length() > 0) {
+			        	JOptionPane.showMessageDialog(null, "Please fill in the course name field");
+			        } else {
 			        	JOptionPane.showMessageDialog(null, "Please fill in all required fields");
 			        }
 				//Query
@@ -210,12 +224,13 @@ public class MainView extends JFrame {
 	            new String [] {
 	                "Lecturer name", "Course name", "Knowledge & Competence", "Teaching skills", "Ethical values"
 	            }
-	        ));
+));
 		table.addMouseListener(new java.awt.event.MouseAdapter() {
 	            public void mouseClicked(java.awt.event.MouseEvent evt) {
 	                //jTable1MouseClicked(evt);
 	            }
 	        });
+		
 	    jScrollPane1.setViewportView(table);
 		panel.add(jScrollPane1);
 		
@@ -251,9 +266,24 @@ public class MainView extends JFrame {
         		fecthLecturers();
         		getData();
         		getMarks();
+        		getHODMarks();
+        		getAverage();
+        		getStudentsMarks();
+        		JOptionPane.showMessageDialog(null,"Data refreshed!");
             }
 		});
 		mnNewMenu.add(mntmNewMenuItem_2);
+		
+		JMenuItem mntmNewMenuItem_3 = new JMenuItem("Exit");
+		mntmNewMenuItem_3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            	int result = JOptionPane.showConfirmDialog(null, "Sure? You want to exit?", "Please confirm", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            	if(result == JOptionPane.YES_NO_OPTION) {
+            		System.exit(0);
+            	}	
+            }
+		});
+		mnNewMenu.add(mntmNewMenuItem_3);
 		
 		JSeparator separator = new JSeparator();
 		separator.setBounds(10, 210, 394, 2);
@@ -286,14 +316,14 @@ public class MainView extends JFrame {
 		panel.add(lblNewLabel_8);
 		
 		lblNewLabel_9 = new JLabel("0");
-		lblNewLabel_9.setBounds(554, 418, 46, 14);
+		lblNewLabel_9.setBounds(554, 418, 82, 14);
 		panel.add(lblNewLabel_9);
 		
-		JLabel lblNewLabel_10 = new JLabel("Total marks of HOD :");
+		lblNewLabel_10 = new JLabel("Total marks of HOD :");
 		lblNewLabel_10.setBounds(414, 442, 130, 14);
 		panel.add(lblNewLabel_10);
 		
-		JLabel lblNewLabel_11 = new JLabel("0");
+		lblNewLabel_11 = new JLabel("0");
 		lblNewLabel_11.setBounds(554, 443, 46, 14);
 		panel.add(lblNewLabel_11);
 		
@@ -301,9 +331,54 @@ public class MainView extends JFrame {
 		lblNewLabel_12.setBounds(414, 467, 130, 14);
 		panel.add(lblNewLabel_12);
 		
-		JLabel lblNewLabel_13 = new JLabel("0");
+		lblNewLabel_13 = new JLabel("0");
 		lblNewLabel_13.setBounds(554, 467, 46, 14);
 		panel.add(lblNewLabel_13);
+		
+		JLabel lblNewLabel_8_1 = new JLabel("Average :");
+		lblNewLabel_8_1.setBounds(646, 416, 101, 14);
+		panel.add(lblNewLabel_8_1);
+		
+		lblNewLabel_9_1 = new JLabel("0");
+		lblNewLabel_9_1.setBounds(757, 416, 46, 14);
+		panel.add(lblNewLabel_9_1);
+		
+		JLabel lblNewLabel_14 = new JLabel("Lecturers : ");
+		lblNewLabel_14.setBounds(646, 442, 66, 14);
+		panel.add(lblNewLabel_14);
+		
+		comboBox_1_1 = new JComboBox<String>();
+		comboBox_1_1.setBounds(733, 438, 212, 29);
+		panel.add(comboBox_1_1);
+		
+		comboBox_1_1.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				// TODO Auto-generated method stub
+				
+				try{
+
+		            java.sql.Statement stmt1= maConnexion.ObtenirConnexion().createStatement();
+		            java.sql.ResultSet resultat= stmt1.executeQuery("SELECT * FROM evaluations_record WHERE lecturer_name ='"+comboBox_1_1.getSelectedItem().toString()+"'");
+			        
+		            
+		            float row_count = 0, average;
+		            
+		            while(resultat.next()) {
+			        	row_count = row_count+1;
+			        }
+		            
+		            average = marksSum / row_count;
+		            
+		            lblNewLabel_9_1.setText(average+ " %");
+		            
+			
+		        }catch(Exception e1){
+		    	   JOptionPane.showMessageDialog(null,"Error loading total incomes"+ e1.toString());
+		        }
+				
+			}
+		});
 		
 		chckbxNewCheckBox.addItemListener(new ItemListener() {
 			@Override
@@ -335,6 +410,9 @@ public class MainView extends JFrame {
 		fecthStudents();
 		fecthLecturers();
 		getMarks();
+		getAverage();
+		getStudentsMarks();
+		getHODMarks();
 	}
 	
 	public void fecthStudents() {
@@ -365,23 +443,141 @@ public class MainView extends JFrame {
 		
 		
 	       }
+		 
+		 try{
+			 comboBox_1_1.removeAllItems();
+	         java.sql.Statement stmt1= maConnexion.ObtenirConnexion().createStatement();
+	         java.sql.ResultSet resultat= stmt1.executeQuery("SELECT * FROM lecturers_tb");
+	         while(resultat.next()){                     
+	        	 comboBox_1_1.addItem(resultat.getString("lecturer_name")); 
+	         }
+		
+	       }catch(Exception e){
+		
+		
+	       }
 	}
 	
 	public void getMarks() {
 		System.out.println("Get marks function called");
-		try {
-		 System.out.println("Trying the query...");
-         java.sql.Statement stmt1= maConnexion.ObtenirConnexion().createStatement();
-         java.sql.ResultSet resultat= stmt1.executeQuery("SELECT * FROM evaluations_record");
-         while(resultat.next()){      
-        	 System.out.println("Record "+resultat.getFloat(4));
-        	 total_max = resultat.getFloat(4)+resultat.getFloat(5)+resultat.getFloat(6);
-         }
+		try{
+
+            java.sql.Statement stmt1= maConnexion.ObtenirConnexion().createStatement();
+            java.sql.ResultSet resultat= stmt1.executeQuery("SELECT ROUND(SUM(knowledge_points),2) FROM evaluations_record");
+            
+            java.sql.Statement stmt2= maConnexion.ObtenirConnexion().createStatement();
+            java.sql.ResultSet resultat1 = stmt2.executeQuery("SELECT ROUND(SUM(teaching_points),2) FROM evaluations_record");
+            
+            java.sql.Statement stmt3= maConnexion.ObtenirConnexion().createStatement();
+            java.sql.ResultSet resultat2 = stmt3.executeQuery("SELECT ROUND(SUM(ethical_points),2) FROM evaluations_record");
+            
+            while(resultat.next()) {
+	        	marksSum = resultat.getFloat(1);
+	        }
+            
+            while(resultat1.next()) {
+            	marksSum = marksSum+resultat1.getFloat(1);
+            }
+            
+            while(resultat2.next()) {
+            	marksSum = marksSum+resultat2.getFloat(1);
+            }
+            
+	        lblNewLabel_9.setText(marksSum+ " Pts");
+            
 	
-       }catch(Exception e){
-	 
+        }catch(Exception e){
+    	   JOptionPane.showMessageDialog(null,"Error loading total incomes"+ e.toString());
+        }
+	}
 	
-       }
-	   lblNewLabel_9.setText(total_max+"");	
+	public void getAverage() {
+		System.out.println("Get average function called");
+		try{
+
+            java.sql.Statement stmt1= maConnexion.ObtenirConnexion().createStatement();
+            java.sql.ResultSet resultat= stmt1.executeQuery("SELECT lecturer_name FROM evaluations_record");
+	        
+            
+            float row_count = 0, average;
+            
+            while(resultat.next()) {
+	        	row_count = row_count+1;
+	        }
+            
+            average = marksSum / row_count;
+            
+            lblNewLabel_9_1.setText(average+ " %");
+            
+	
+        }catch(Exception e){
+    	   JOptionPane.showMessageDialog(null,"Error loading total incomes"+ e.toString());
+        }
+	}
+	
+	public void getHODMarks() {
+		System.out.println("Get HOD marks function called");
+		try{
+
+            java.sql.Statement stmt1= maConnexion.ObtenirConnexion().createStatement();
+            java.sql.ResultSet resultat= stmt1.executeQuery("SELECT ROUND(SUM(knowledge_points),2) FROM evaluations_record WHERE evaluator='"+HOD+"'");
+            
+            java.sql.Statement stmt2= maConnexion.ObtenirConnexion().createStatement();
+            java.sql.ResultSet resultat1 = stmt2.executeQuery("SELECT ROUND(SUM(teaching_points),2) FROM evaluations_record WHERE evaluator='"+HOD+"'");
+            
+            java.sql.Statement stmt3= maConnexion.ObtenirConnexion().createStatement();
+            java.sql.ResultSet resultat2 = stmt3.executeQuery("SELECT ROUND(SUM(ethical_points),2) FROM evaluations_record WHERE evaluator='"+HOD+"'");
+            
+            while(resultat.next()) {
+	        	marksSum = resultat.getFloat(1);
+	        }
+            
+            while(resultat1.next()) {
+            	marksSum = marksSum+resultat1.getFloat(1);
+            }
+            
+            while(resultat2.next()) {
+            	marksSum = marksSum+resultat2.getFloat(1);
+            }
+            
+            lblNewLabel_11.setText(marksSum+ " Pts");
+            
+	
+        }catch(Exception e){
+    	   JOptionPane.showMessageDialog(null,"Error loading total incomes"+ e.toString());
+        }
+	}
+	
+	public void getStudentsMarks() {
+		System.out.println("Get Students marks function called");
+		try{
+
+            java.sql.Statement stmt1= maConnexion.ObtenirConnexion().createStatement();
+            java.sql.ResultSet resultat= stmt1.executeQuery("SELECT ROUND(SUM(knowledge_points),2) FROM evaluations_record WHERE evaluator<>'"+HOD+"'");
+            
+            java.sql.Statement stmt2= maConnexion.ObtenirConnexion().createStatement();
+            java.sql.ResultSet resultat1 = stmt2.executeQuery("SELECT ROUND(SUM(teaching_points),2) FROM evaluations_record WHERE evaluator<>'"+HOD+"'");
+            
+            java.sql.Statement stmt3= maConnexion.ObtenirConnexion().createStatement();
+            java.sql.ResultSet resultat2 = stmt3.executeQuery("SELECT ROUND(SUM(ethical_points),2) FROM evaluations_record WHERE evaluator<>'"+HOD+"'");
+            
+            while(resultat.next()) {
+	        	marksSum = resultat.getFloat(1);
+	        }
+            
+            while(resultat1.next()) {
+            	marksSum = marksSum+resultat1.getFloat(1);
+            }
+            
+            while(resultat2.next()) {
+            	marksSum = marksSum+resultat2.getFloat(1);
+            }
+            
+            lblNewLabel_13.setText(marksSum+ " Pts");
+            
+	
+        }catch(Exception e){
+    	   JOptionPane.showMessageDialog(null,"Error loading total incomes"+ e.toString());
+        }
 	}
 }

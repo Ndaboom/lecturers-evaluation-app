@@ -81,7 +81,6 @@ public class LoginView {
 		frmAuthentification.setLocationRelativeTo(null);
 		
 		JPanel panel = new JPanel();
-		panel.setToolTipText("Entrez votre nom d'utilisateur");
 		panel.setBackground(Color.WHITE);
 		panel.setBounds(0, 0, 428, 299);
 		frmAuthentification.getContentPane().add(panel);
@@ -94,6 +93,7 @@ public class LoginView {
 		
 		textField = new JTextField();
 		textField.setBounds(57, 114, 297, 30);
+		textField.setToolTipText("Entrez votre nom d'utilisateur");
 		panel.add(textField);
 		textField.setColumns(10);
 		
@@ -115,7 +115,12 @@ public class LoginView {
 		btnNewButton.setForeground(new java.awt.Color(0, 51, 255));
 		btnNewButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-            	login(evt);
+            	if(textField.getText().trim().length()>0 && passwordField.getText().toUpperCase().trim().length()>0) {
+            		login(evt);
+            	} else {
+            		JOptionPane.showMessageDialog(null, "Please fill in all required fields");
+            	}
+            	
             }
         });
 		panel.add(btnNewButton);
